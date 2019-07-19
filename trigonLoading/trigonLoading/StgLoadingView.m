@@ -63,17 +63,17 @@ static StgLoadingView *stgload = nil;
 }
 
 -(void)loadShow{
+    if ([StgLoadingView shareLoadingView].superview)return;
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:self];
     _isFinish = NO;
     [self startLoadAnimation];
 }
 -(void)loadHide{
     _isFinish = YES;
     [self stopAnimation];
+    [self removeFromSuperview];
 }
--(void)willRemoveSubview:(UIView *)subview{
-    [super willRemoveSubview:subview];
-    [self loadHide];
-}
+
 
 -(void)startLoadAnimation{
     if (_isFinish)return;

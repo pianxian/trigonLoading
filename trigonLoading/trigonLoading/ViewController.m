@@ -15,9 +15,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:[StgLoadingView shareLoadingView]];
-    [[StgLoadingView shareLoadingView] loadShow];
+  
+
 }
 
-
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+  [[StgLoadingView shareLoadingView] loadShow];
+}
 @end
