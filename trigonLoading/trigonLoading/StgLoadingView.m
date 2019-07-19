@@ -16,6 +16,7 @@
 @property (nonatomic,assign) BOOL isFinish;
 @end
 #define cordioWidth 20
+#define stgDelegate [[[UIApplication sharedApplication] delegate] window]
 static StgLoadingView *stgload = nil;
 @implementation StgLoadingView
 
@@ -41,6 +42,28 @@ static StgLoadingView *stgload = nil;
     }
     return self;
 }
+-(UIView *)getCurrentView {
+    return [self getVisibleViewControllerFrom:(UIViewController *)stgDelegate.window.rootViewController].view;
+}
+
+-(UIViewController *)gecurentViewControl{
+    return [self getVisibleViewControllerFrom:(UIViewController *)stgDelegate.rootViewController];
+}
+/// 这个方法是拿到当前正在显示的控制器，不管是push进去的，还是present进去的都能拿到
+-(UIViewController *)getVisibleViewControllerFrom:(UIViewController*)vc {
+    if ([vc isKindOfClass:[UINavigationController class]]) {
+        return [self getVisibleViewControllerFrom:[((UINavigationController*) vc) visibleViewController]];
+    }else if ([vc isKindOfClass:[UITabBarController class]]){
+        return [self getVisibleViewControllerFrom:[((UITabBarController*) vc) selectedViewController]];
+    } else {
+        if (vc.presentedViewController) {
+            return [self getVisibleViewControllerFrom:vc.presentedViewController];
+        } else {
+            return vc;
+        }
+    }
+}
+
 -(void)initView{
     [self addSubview:self.redImageView];
     self.backgroundColor = [UIColor colorWithRed:248/255.f green:248.f/255.f blue:248.f/255.f alpha:1];
@@ -64,7 +87,8 @@ static StgLoadingView *stgload = nil;
 
 -(void)loadShow{
     if ([StgLoadingView shareLoadingView].superview)return;
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:self];
+    
+    [[self gecurentViewControl].view addSubview:self];
     _isFinish = NO;
     [self startLoadAnimation];
 }

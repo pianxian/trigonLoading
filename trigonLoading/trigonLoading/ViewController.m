@@ -16,10 +16,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
   
-
+    [[StgLoadingView shareLoadingView] loadShow];
 }
 
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-  [[StgLoadingView shareLoadingView] loadShow];
-}
+
 @end
